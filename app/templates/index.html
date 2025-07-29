@@ -1,0 +1,73 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Configuration du véhicule{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Configurer votre véhicule</h2>
+
+    <form method="POST" action="{{ url_for('main.result') }}">
+        <div class="row">
+            <!-- 🟦 Champs à sélection multiple (issus de _convert_to_list) -->
+            {% for label, name, options in [
+            ("Confort & Commodités", "comfort_convenience", comfort_convenience),
+            ("Divertissement & Médias", "entertainment_media", entertainment_media),
+            ("Extras", "extras", extras),
+            ("Sécurité", "safety_security", safety_security)
+            ] %}
+            <div class="col-md-6 mb-4">
+                <label class="form-label fw-bold">{{ label }}</label>
+                <select class="form-select" name="{{ name }}[]" multiple>
+                    {% for option in options %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+                <small class="form-text text-muted">Sélection multiple possible</small>
+            </div>
+            {% endfor %}
+
+            <!-- 🟩 Sélection simple (issus de df.unique()) -->
+            {% for label, name, options in [
+            ("Carburant", "fuel", fuel),
+            ("Type de véhicule", "type", type),
+            ("Carrosserie", "body_type", body_type),
+            ("Marque / Modèle", "make_model", make_model),
+            ("Type de peinture", "pain_type", pain_type),
+            ("Sellerie", "upholstery_type", upholstery_type),
+            ("Boîte de vitesses", "gearing_type", gearing_type),
+            ("Chaîne motrice", "drive_chain", drive_chain),
+            ("Consommation combinée", "cons_comb", cons_comb),
+            ("Nombre de vitesses", "gears", gears)
+            ] %}
+            <div class="col-md-6 mb-4">
+                <label class="form-label fw-bold">{{ label }}</label>
+                <select class="form-select" name="{{ name }}">
+                    <option disabled selected>-- Choisir --</option>
+                    {% for option in options %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+
+            <!-- 🔢 Champs numériques -->
+            {% for label, name, value in [
+            ("Cylindrée (cm³)", "displacement_cc", displacement_cc),
+            ("Poids (kg)", "weight_kg", weight_kg),
+            ("Âge du véhicule", "age", age),
+            ("Kilométrage", "km", km)
+            ] %}
+            <div class="col-md-6 mb-4">
+                <label class="form-label fw-bold">{{ label }}</label>
+                <input type="number" class="form-control" name="{{ name }}" min="0" step="any" value="{{ value }}">
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill">
+                Prédire le prix
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
