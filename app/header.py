@@ -240,6 +240,5 @@ def get_convenience_entertainment():
         **get_vehicle_specifications()
     }
 
-
 MODEL_COLUMNS = create_input_dict()
 FORMAT_COLUMNS = get_convenience_entertainment()
